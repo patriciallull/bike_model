@@ -7,6 +7,7 @@ import pathlib
 from pathlib import Path
 import os.path
 from os import path
+from sklearn.model_selection import GridSearchCV
 
 
 # Load the data
@@ -93,8 +94,31 @@ def train_and_persist(hour):
     test_y = test["cnt"]
     # return train_X, train_y, test_X, test_y
     # RANDOM FOREST
-    # separate_x_y(hour)
-    rf = RandomForestRegressor(n_estimators=50, random_state=42)
+    # Grid search
+
+    # gsc = GridSearchCV(
+    #    estimator=RandomForestRegressor(),
+    #   param_grid={ 'max_depth': [10, 40, ],
+    #               'min_samples_leaf': [1, 2],
+    #              'min_samples_split': [2, 5],
+    #             'n_estimators': [200, 400]},
+    # cv=5,
+    # scoring="r2",
+    # verbose=10,
+    # n_jobs=4,
+    # )
+
+    # grid_result = gsc.fit(train_X, train_y)
+
+    # gsc.best_params_
+
+    rf = RandomForestRegressor(
+        max_depth=40,
+        min_samples_leaf=1,
+        min_samples_split=2,
+        n_estimators=200,
+        random_state=42,
+    )
     rf.fit(train_X, train_y)
     result = rf.predict(test_X)
 
